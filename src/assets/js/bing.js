@@ -21,7 +21,8 @@ const req = https.request(options, bing_res => {
     img_array.forEach(img => {
       img_url.push(img.url);
     });
-    var jsonpStr = "getBingImages(" + JSON.stringify(img_url) + ")";
+    // var jsonpStr = "getBingImages(" + JSON.stringify(img_url) + ")";
+    var jsonpStr = JSON.stringify(img_url);
     fs.writeFile('./src/assets/json/images.json', jsonpStr, (err) => {
       if (err) {
         throw err;

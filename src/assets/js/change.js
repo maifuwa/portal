@@ -1,9 +1,4 @@
 function getBingImages(imgUrls) {
-	/**
-	 * 获取Bing壁纸
-	 * 先使用 GitHub Action 每天获取 Bing 壁纸 URL 并更新 images.json 文件
-	 * 然后读取 images.json 文件中的数据
-	 */
 	var indexName = "bing-image-index";
 	var index = sessionStorage.getItem(indexName);
 	var panel = document.body;
@@ -15,3 +10,14 @@ function getBingImages(imgUrls) {
 	panel.style.backgroundSize = "cover";
 	sessionStorage.setItem(indexName, index);
 }
+
+fetch("https://raw.githack.com/maifuwa/portal/main/src/assets/json/images.json")
+	.then(response => response.json())
+	.then(data => getBingImages(data))
+	.catch(e => {
+		console.log("获取图片失败, 正在尝试使用本地图片");
+		fetch("/src/assets/json/images.json").then(res => res.json()).then(data => {
+			getBingImages(data);
+			console.log("使用本地图片成功");
+		}).catch(e => console.error("使用本地图片失败", e));
+	});

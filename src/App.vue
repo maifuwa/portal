@@ -1,9 +1,13 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { onMounted } from 'vue';
 
 const hitokoto = ref("红豆生南国，春来发几枝。");
 const from = ref("王维");
+const date = computed(() => {
+  let now = new Date();
+  return now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
+});
 
 // onMounted(() => {
 //   fetch('https://v1.hitokoto.cn')
@@ -51,10 +55,13 @@ const social = ref([{
 
 <template>
   <div class="all">
-    <div>
+
+    <div class="box">
       <img src="/src/assets/avatar/avatar.jpg" alt="avatar" class="avatar">
+      <span class="date">{{ date }}</span>
     </div>
-    <div style="display: flex; flex-direction: column; text-align: center; ">
+
+    <div tyle="display: flex; flex-direction: column; text-align: center; ">
       <a href="#" style="color: #D0ADF0;font-size: xx-large;font-family: EngraversOldEnglishBTW03-Rg;">MAIFUWA</a>
       <p
         style="letter-spacing: 2px; line-height: 0.8; font-family: 'Old English Text MT';font-size: large;margin: 1% 0 5% 0;">
@@ -92,11 +99,50 @@ const social = ref([{
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  animation: all 0.6s ease-out 1;
+}
+
+@keyframes all {
+  0% {
+    transform: translate(0, 100px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.box {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: gray;
+  position: relative;
+
+  transform-style: preserve-3d;
+}
+
+.date {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: pre-wrap;
+  font-size: x-large;
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 </style>
