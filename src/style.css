@@ -45,7 +45,7 @@ hr {
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
+  /* :root {
     color: #213547;
     background-color: #ffffff;
   }
@@ -56,5 +56,9 @@ hr {
 
   hr {
     border: 1px rgba(0, 0, 0, 0.14) solid;
+  } */
+
+  button {
+    color: white;
   }
 }
