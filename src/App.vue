@@ -1,23 +1,58 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { onMounted } from 'vue';
+import { onMounted, onBeforeMount } from 'vue';
 
-const hitokoto = ref("红豆生南国，春来发几枝。");
+const hitokoto = ref("红豆生南国，春来发几枝。愿君多采撷，此物最相思。");
 const from = ref("王维");
 const date = computed(() => {
   let now = new Date();
   return now.getFullYear() + '年' + (now.getMonth() + 1) + '月' + now.getDate() + '日';
 });
 
-// onMounted(() => {
-//   fetch('https://v1.hitokoto.cn')
-//     .then(response => response.json())
-//     .then(data => {
-//       hitokoto.value = data.hitokoto;
-//       from.value = data.from;
-//     })
-//     .catch(err => console.error(err));
-// });
+onMounted(() => {
+  fetch('https://v1.hitokoto.cn')
+    .then(response => response.json())
+    .then(data => {
+      hitokoto.value = data.hitokoto;
+      from.value = data.from;
+    })
+    .catch(err => console.error(err));
+});
+
+onBeforeMount(() => {
+  const controller = new AbortController();
+  const signal = controller.signal;
+  fetch("https://raw.githack.com/maifuwa/portal/main/src/assets/json/images.json", {
+    signal
+  })
+    .then(response => response.json())
+    .then(data => getBingImages(data))
+    .catch(e => {
+      console.log("获取图片失败, 正在尝试使用本地图片");
+      fetch('images.json').then(res => res.json()).then(data => {
+        getBingImages(data);
+        console.log("使用本地图片成功");
+      }).catch(e => console.error("使用本地图片失败", e));
+    });
+
+  setTimeout(() => {
+    controller.abort();
+  }, sessionStorage.getItem('watchTime') || 1000);
+});
+
+function getBingImages(imgUrls) {
+  var indexName = "bing-image-index";
+  var index = sessionStorage.getItem(indexName);
+  var panel = document.body;
+  if (isNaN(index) || index == 7) index = 0;
+  else index++;
+  var imgUrl = imgUrls[index];
+  var url = "https://www.cn.bing.com" + imgUrl;
+  panel.style.background = "url('" + url + "') center center no-repeat #666";
+  panel.style.backgroundSize = "cover";
+  sessionStorage.setItem(indexName, index);
+  sessionStorage.setItem('watchTime', 100);
+}
 
 const navigation = ref([{
   href: '#',
