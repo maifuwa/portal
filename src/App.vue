@@ -22,7 +22,7 @@ onMounted(() => {
 onBeforeMount(() => {
   const controller = new AbortController();
   const signal = controller.signal;
-  fetch("https://raw.githack.com/maifuwa/portal/main/src/assets/json/images.json", {
+  fetch("https://raw.githack.com/maifuwa/portal/main/public/images.json", {
     signal
   })
     .then(response => response.json())
